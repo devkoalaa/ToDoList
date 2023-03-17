@@ -3,7 +3,9 @@ import { Title, Form, Issues, Error } from './styles'
 import { MdModeEdit, MdDelete } from 'react-icons/md'
 
 interface Issue {
+  id: number
   title: string
+  editando: boolean
 }
 
 export const Dashboard: React.FunctionComponent = () => {
@@ -36,7 +38,7 @@ export const Dashboard: React.FunctionComponent = () => {
     }
 
     try {
-      const issue = { title: newIssue }
+      const issue = { id: Date.now(), title: newIssue, editando: false }
 
       setIssues([...issues, issue])
       formEl.current?.reset()
@@ -47,12 +49,28 @@ export const Dashboard: React.FunctionComponent = () => {
     }
   }
 
-  function editIssue(teste: string): void {
-    console.log('editarrrrrrrr', teste)
+  function editIssue(id: number): void {
+    setIssues(
+      issues.map((x) => ({
+        ...x,
+        editando: x.id === id ? true : false,
+      }))
+    )
   }
 
-  function deleteIssue(teste: string): void {
-    console.log('deletaaaaaa', teste)
+  function submitEditIssue(id: number, e: React.KeyboardEvent): void {
+    if (e.key === 'Enter')
+      setIssues(
+        issues.map((x) => ({
+          ...x,
+          title: x.id === id ? (e.target as HTMLInputElement).value : x.title,
+          editando: false,
+        }))
+      )
+  }
+
+  function deleteIssue(id: number): void {
+    setIssues(issues.filter((x) => x.id !== id))
   }
 
   return (
@@ -66,12 +84,12 @@ export const Dashboard: React.FunctionComponent = () => {
       <Issues>
         {issues.map((issue, index) => (
           <div key={issue.title + index}>
-            <strong>{issue.title}</strong>
+            {issue.editando ? <input onKeyUp={(e) => submitEditIssue(issue.id, e)} defaultValue={issue.title}></input> : <strong>{issue.title}</strong>}
             <div>
-              <button onClick={(e) => editIssue(issue.title)}>
+              <button onClick={(e) => editIssue(issue.id)}>
                 <MdModeEdit />
               </button>
-              <button onClick={(e) => deleteIssue(issue.title)}>
+              <button onClick={(e) => deleteIssue(issue.id)}>
                 <MdDelete />
               </button>
             </div>
