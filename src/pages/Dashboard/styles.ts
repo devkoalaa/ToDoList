@@ -15,7 +15,7 @@ export const Title = styled.h1`
 
 export const Form = styled.form<FormProps>`
   margin-top: 40px;
-  max-width: 700px;
+  max-width: 1000px;
   display: flex;
 
   input {
@@ -55,14 +55,15 @@ export const Form = styled.form<FormProps>`
 
 export const Issues = styled.div`
   margin-top: 80px;
-  max-width: 700px;
+  max-width: 1000px;
 
   div {
     background: #fff;
     border-radius: 5px;
     width: 100%;
-    padding: 24px;
+    min-height: 50px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     transition: transform 0.2s;
 
@@ -74,23 +75,40 @@ export const Issues = styled.div`
       margin-top: 16px;
     }
 
-    span {
-      margin: 0 16px;
-      flex: 1;
+    strong {
+      font-size: 20px;
+      color: #3d3d4d;
+      height: 100%;
+      width: 100%;
+      padding: 10px;
+    }
 
-      strong {
-        font-size: 20px;
-        color: red;
-      }
+    div {
+      display: flex;
+      max-width: 15%;
 
       button {
-        width: 160px;
-        background: #04d361;
-        border-radius: 0px 5px 5px 0px;
-        border: 0;
-        color: #fff;
+        width: 100%;
+        height: 50px;
         font-weight: bold;
+        color: #fff;
+        background: #ffa500;
+        border: 0;
+        border-radius: 0px 0px 0px 0px;
         transition: background-color 0.2s;
+
+        &:hover {
+          background-color: ${shade(0.2, '#ffbf00')};
+        }
+
+        & + button {
+          border-radius: 0px 5px 5px 0px;
+          background-color: #c53030;
+        }
+
+        & + button:hover {
+          background-color: ${shade(0.2, '#792923')};
+        }
       }
     }
   }
