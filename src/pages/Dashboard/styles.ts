@@ -75,6 +75,27 @@ export const Issues = styled.div`
       margin-top: 16px;
     }
 
+    button {
+      width: 8%;
+      height: 50px;
+      font-weight: bold;
+      color: #fff;
+      background: green;
+      border: 0;
+      border-radius: 5px 0px 0px 5px;
+      transition: background-color 0.2s;
+    }
+
+    input {
+      flex: 1;
+      height: 50px;
+      padding: 0 24px;
+      border: 2px solid #fff;
+      border-radius: 5px 0px 0px 5px;
+      color: #3a3a3a;
+      border-right: 0;
+    }
+
     strong {
       font-size: 20px;
       color: #3d3d4d;
@@ -98,7 +119,7 @@ export const Issues = styled.div`
         transition: background-color 0.2s;
 
         &:hover {
-          background-color: ${shade(0.2, '#ffbf00')};
+          background-color: ${shade(0.2, '#614700')};
         }
 
         & + button {
@@ -109,6 +130,72 @@ export const Issues = styled.div`
         & + button:hover {
           background-color: ${shade(0.2, '#792923')};
         }
+      }
+    }
+  }
+`
+
+export const IssuesChecked = styled.div`
+  margin-top: 80px;
+  max-width: 1000px;
+
+  div {
+    background: #d9d9d9;
+    border-radius: 5px;
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: translateX(6px);
+    }
+
+    & + div {
+      margin-top: 16px;
+    }
+
+    button {
+      width: 16%;
+      height: 50px;
+      font-weight: bold;
+      color: #fff;
+      background: #c53030;
+      border: 0;
+      border-radius: 5px 0px 0px 5px;
+      transition: background-color 0.2s;
+
+      button:hover {
+        background-color: ${shade(0.2, '#792923')};
+      }
+    }
+
+    strong {
+      font-size: 20px;
+      color: #3d3d4d;
+      height: 100%;
+      width: 100%;
+      padding: 10px;
+    }
+
+    div {
+      justify-content: end;
+
+      button {
+        width: 16%;
+        height: 50px;
+        font-weight: bold;
+        color: #fff;
+        background: #c53030;
+        border: 0;
+        border-radius: 0px 5px 5px 0px;
+        transition: background-color 0.2s;
+        background-color: #c53030;
+      }
+
+      button:hover {
+        background-color: ${shade(0.2, '#792923')};
       }
     }
   }
