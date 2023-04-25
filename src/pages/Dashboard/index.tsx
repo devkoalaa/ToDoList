@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent, FormEvent, FunctionComponent, useEffect, useRef, useState } from 'react'
 import { Title, Form, Issues, IssuesChecked, Error } from './styles'
 import { MdModeEdit, MdDelete, MdCheck, MdOutlineRemoveDone } from 'react-icons/md'
 
@@ -9,8 +9,8 @@ interface Issue {
   checked: boolean
 }
 
-export const Dashboard: React.FunctionComponent = () => {
-  const [issues, setIssues] = React.useState<Issue[]>(() => {
+export const Dashboard: FunctionComponent = () => {
+  const [issues, setIssues] = useState<Issue[]>(() => {
     const storageIssues = localStorage.getItem('@ToDoList:issues')
 
     if (storageIssues) {
@@ -19,7 +19,7 @@ export const Dashboard: React.FunctionComponent = () => {
     return []
   })
 
-  const [issuesChecked, setIssuesChecked] = React.useState<Issue[]>(() => {
+  const [issuesChecked, setIssuesChecked] = useState<Issue[]>(() => {
     const storageIssues = localStorage.getItem('@ToDoList:issuesChecked')
 
     if (storageIssues) {
@@ -28,21 +28,17 @@ export const Dashboard: React.FunctionComponent = () => {
     return []
   })
 
-  const [newIssue, setNewIssue] = React.useState('')
-  const [inputError, setInputError] = React.useState('')
-  const [editInput, setEditInput] = React.useState('')
-  const formEl = React.useRef<HTMLFormElement | null>(null)
+  const [newIssue, setNewIssue] = useState('')
+  const [inputError, setInputError] = useState('')
+  const [editInput, setEditInput] = useState('')
+  const formEl = useRef<HTMLFormElement | null>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem('@ToDoList:issues', JSON.stringify(issues))
     localStorage.setItem('@ToDoList:issuesChecked', JSON.stringify(issuesChecked))
   }, [issues, issuesChecked])
 
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setNewIssue(event.target.value)
-  }
-
-  function handleAddIssue(event: React.FormEvent<HTMLFormElement>): void {
+  function handleAddIssue(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
 
     if (!newIssue) {
@@ -103,14 +99,6 @@ export const Dashboard: React.FunctionComponent = () => {
     }
   }
 
-  function deleteIssue(id: number): void {
-    setIssues(issues.filter((issue) => issue.id !== id))
-  }
-
-  function deleteIssueChecked(id: number): void {
-    setIssuesChecked(issuesChecked.filter((issue) => issue.id !== id))
-  }
-
   function checkIssue(id: number): void {
     setIssues(issues.filter((issue) => issue.id !== id))
     setIssuesChecked(issuesChecked.concat(issues.filter((issue) => issue.id === id)))
@@ -127,15 +115,11 @@ export const Dashboard: React.FunctionComponent = () => {
     }
   }
 
-  function tiraErro() {
-    setInputError('')
-  }
-
   return (
     <>
       <Title>To Do List</Title>
       <Form ref={formEl} hasError={Boolean(inputError)} onSubmit={handleAddIssue}>
-        <input placeholder="Nome da Tarefa" onBlur={tiraErro} onChange={handleInputChange}></input>
+        <input placeholder="Nome da Tarefa" onBlur={() => setInputError('')} onChange={(event) => setNewIssue(event.target.value)}></input>
         <button type="submit">Adicionar</button>
       </Form>
       {inputError && <Error>{inputError}</Error>}
@@ -146,12 +130,7 @@ export const Dashboard: React.FunctionComponent = () => {
               <MdCheck />
             </button>
             {issue.editando ? (
-              <input
-                id={issue.id.toString()}
-                onChange={(e) => getEditInputValue(e)}
-                onKeyUp={(e) => submitEditIssue(issue.id, e)}
-                defaultValue={issue.title}
-              ></input>
+              <input id={issue.id.toString()} onChange={(e) => getEditInputValue(e)} onKeyUp={(e) => submitEditIssue(issue.id, e)} defaultValue={issue.title}></input>
             ) : (
               <strong>{issue.title}</strong>
             )}
@@ -159,7 +138,7 @@ export const Dashboard: React.FunctionComponent = () => {
               <button onClick={() => editIssue(issue.id)}>
                 <MdModeEdit />
               </button>
-              <button onClick={() => deleteIssue(issue.id)}>
+              <button onClick={() => setIssues(issues.filter((item) => item.id !== issue.id))}>
                 <MdDelete />
               </button>
             </div>
@@ -174,7 +153,7 @@ export const Dashboard: React.FunctionComponent = () => {
             </button>
             <strong>{issueChecked.title}</strong>
             <div>
-              <button onClick={() => deleteIssueChecked(issueChecked.id)}>
+              <button onClick={() => setIssuesChecked(issuesChecked.filter((item) => item.id !== issueChecked.id))}>
                 <MdDelete />
               </button>
             </div>
